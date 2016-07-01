@@ -1,0 +1,8 @@
+class Solution(object):
+    def isPowerOfFour(self, num):
+        return (num > 0) and (num & (num - 1) == 0) and (num & 0x55555555 == num)
+        """
+        :type num: int
+        :rtype: bool
+        the trick is the power of four has only one "1" at this odd digit
+        """
