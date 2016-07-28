@@ -36,6 +36,34 @@ def threeSum(nums):
         ret.append(list(i))
     return ret
 
+def threeSum_v2(nums):
+    ans = []
+    if len(nums) < 3:
+        return ans
+    nums.sort()
+    target = 0
+
+    for i in range(len(nums) - 2):
+        j = i + 1
+        k = len(nums) - 1
+        while j < k:
+            if nums[i] + nums[j] + nums[k] > target:
+                k -= 1
+            elif nums[i] + nums[j] + nums[k] < target:
+                j += 1
+            else:
+                ans.append([nums[i], nums[j], nums[k]])
+                k -= 1
+                j += 1
+    
+    check = set()
+    for i in ans:
+        if tuple(i) not in check:
+            check.add(tuple(i))
+    ret = []
+    for i in check:
+        ret.append(list(i))
+    return ret
 
 print threeSum(nums)
-
+print threeSum_v2(nums)
