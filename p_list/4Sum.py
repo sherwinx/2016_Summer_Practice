@@ -1,46 +1,27 @@
+from collections import *
 import collections
 
 #nums = [1, 0, -1, 0, -2, 2]
 nums = [1,0,-1,0,-2,2]
 target = 0
-def threeSum(nums, target):
+def fourSum(nums, target):
     table = collections.defaultdict(list)
     ans = []
-    for i in range(len(nums)):
-        table[nums[i]].append(i)  
-    # format {0:[1,2], 1:[3]}
 
-    for num in table.keys():
-        rest = target - num
-        for twoNum in table.keys():
-            if num == twoNum and len(table[num]) == 1:
-                continue
-            cple = rest - twoNum
-            for threeNum in table.keys(): 
-                if threeNum == twoNum and twoNum == num and len(table[num]) < 3:
-                    continue
-                if threeNum  == twoNum and len(table[twoNum]) == 1:
-                    continue
-                if threeNum == num and len(table[num]) == 1:
-                    continue
-                last = cple - threeNum
-                if last in table.keys():
-                    if last == num and len(table[last]) == 1:
-                        continue
-                    if last == twoNum and len(table[last]) == 1:
-                        continue
-                    if last == threeNum and len(table[last]) == 1:
-                        continue
-                    if last == num and last == twoNum and len(table[last]) < 3:
-                        continue 
-                    if last == num and last == threeNum and len(table[last]) < 3:
-                        continue 
-                    if last == twoNum and last == threeNum and len(table[last]) < 3:
-                        continue 
-                    if last == twoNum and last == threeNum and last == num and len(table[last]) < 4:
-                        continue
-                    else:
-                        ans.append([num, twoNum, threeNum, last])
+    for i in range(len(nums)):
+        table[nums[i]].append(i)
+
+    pairTable = collections.defaultdict(list)
+    for i in range(len(nums)):
+        for j in range(i + 1, len(nums)):
+            pairTable[(nums[i] + nums[j])].append((nums[i], nums[j]))  
+
+    for twoSum in pairTable:
+        cple = target - twoSum
+        if cple in pairTable:
+            for num, twoNum in pairTable[twoSum]:
+                for threeNum, fourNum in pairTable[cple]:
+                    ans.append([num, twoNum, threeNum, fourNum])
     ## Remove duplicates and sort each individual list
     for i in ans:
         i.sort()
@@ -51,6 +32,14 @@ def threeSum(nums, target):
     ret = []
     for i in check:
         ret.append(list(i))
-    return ret
 
-print threeSum(nums, target)
+    ans = list(ret)
+    for eachAns in ret:
+       listTable = dict(Counter(eachAns)) 
+       for ele in listTable:
+           if listTable[ele] > len(table[ele]):
+               if eachAns in ans:
+                   ans.remove(eachAns)
+    return ans
+
+print fourSum(nums, target)
